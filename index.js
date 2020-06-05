@@ -25,6 +25,7 @@ const getPokemon = async () => {
     try {
       const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomNumber}`)     
       const data = await response.json();
+      return data
     } catch(err) {
       console.log(err)
     }
@@ -32,13 +33,29 @@ const getPokemon = async () => {
 
 const pokemonArray = [];
 
-while (pokemonArray.length < 5) {
+let pickPokemon = (array) => {
+  array.forEach(pokemon => {
+    pokemonArray.push(pokemon.name)
+  })
+  console.log(pokemonArray)
+}
+
+while (pokemonArray.length < 4) {
 pokemonArray.push(getPokemon())
 
 }
 
-Promise.all(pokemonArray).then((response) => response)
+// Promise.all(pokemonArray).then((response) => console.log(response))
 
+Promise.all(pokemonArray)
+  .then((value)=> {
+    pickPokemon(value)
+  })
+    .catch(err => {
+    console.log(err)
+  })
+
+// console.log(pokemonArray);
 
 // while(something){
 //     promises.push(new Promise((r, j) => {
@@ -50,7 +67,7 @@ Promise.all(pokemonArray).then((response) => response)
 //     //All operations done
 // });
 
-console.log(pokemonArray);
+
 
 const chosenPokemon = pokemonArray[Math.floor(Math.random() * 4)]
 
