@@ -1,12 +1,30 @@
 const fetch = require('node-fetch');
 const readline = require('readline-sync');
 const _=require('lodash')
+// const inquirer = require('inquirer');
+// .then syntax
 
-const quiz = (cb) => {
+// fetch("https://pokeapi.co/api/v2/pokemon/pikachu")
+//   .then((response) => response.json())
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err))
+
+// const getMenuOption = () => readline.questionInt('> ');
+//   const displayMenu = () => {
+//     console.log('1. Pikachu');
+//     console.log('2. Languages');
+//     console.log('3. Quit');
+//   };
+
+// const userInput = getMenuOption()
+// async/await syntax
+// const userInput = readline.question('Name a pokemon').toLowerCase();
+
+const randomNumber =  Math.ceil(Math.random() * Math.floor(151))
+// console.log(randomNumber)
 
 const getPokemon = async () => {
     try {
-      let randomNumber =  Math.ceil(Math.random() * Math.floor(151))
       const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomNumber}`)     
       const data = await response.json()
       return data
@@ -25,17 +43,31 @@ pokemonArray.push(getPokemon())
 Promise.all(pokemonArray).then((response) => guessPokemon(response))
 
 
-let pokemons=[]
+// while(something){
+//     promises.push(new Promise((r, j) => {
+//         getPokemon() => r());
+//     });
+// }
+// //Then this returns a promise that will resolve when ALL are so.
+// Promise.all(promises).then(() => {
+//     //All operations done
+// });
+
+// console.log(pokemonArray);
+let pokemons = [];
+
 const guessPokemon = (array) => {
     
     let chosenPokemon = array[Math.floor(Math.random() * 4)]
     console.log(chosenPokemon.name)
+    // console.log(`Pokedex id: ${chosenPokemon.id}`);
     array.forEach(pokemon => {
       pokemons.push(_.capitalize(pokemon.name))
     })
+    console.log(pokemons)
     let correct_answer = pokemons.indexOf(_.capitalize(chosenPokemon.name))
-    console.log(`Id: ${chosenPokemon.id}`);
-          let answer = readline.keyInSelect(pokemons, "Who's that Pokemon?");
+    console.log(correct_answer)
+      let answer = readline.keyInSelect(pokemons, "Who's that Pokemon?");
       if (answer === correct_answer) {
           console.log("Correct!")
       } else {
@@ -50,13 +82,9 @@ const guessPokemon = (array) => {
               if (answer === correct_answer) {
           console.log("Correct!")
               } else {
-                console.log(`Wrong, Game Over! The correct answer is ${_.capitalize(chosenPokemon.name)}`)
+                console.log(`Wrong, Game Over! The correct answer is ${chosenPokemon.name}`)
               }
           }
       }
 }
-}
-quiz()
-module.exports = { quiz }
-// if (!response.ok) throw new Error('Thats not a Pokemon!');
 
